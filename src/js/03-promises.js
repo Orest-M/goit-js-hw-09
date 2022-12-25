@@ -1,33 +1,39 @@
-const firstDelay = document.getElementsByName('delay');
-const step = document.getElementsByName('step');
-const amount = document.getElementsByName('amount');
-const submit = document.querySelector('button');
+const form = document.querySelector('.form');
+const firstDelayInput = document.querySelector('input[name = "delay"]');
+const stepInput = document.querySelector('input[name = "step"]');
+const amountInput = document.querySelector('input[name = "amount"]');
 
-// function createPromise(position, delay) {
-//   setTimeout(() => {}, delay);
+form.addEventListener('submit', onSubmit);
 
-//   const shouldResolve = Math.random() > 0.3;
-//   if (shouldResolve) {
-//     // Fulfill
-//   } else {
-//     // Reject
-//   }
-// }
+function onSubmit(evt) {
+  evt.preventDefault();
 
-// createPromise(2, 1500)
-//   .then(({ position, delay }) => {
-//     console.log(`✅ Fulfilled promise ${position} in ${delay}ms`);
-//   })
-//   .catch(({ position, delay }) => {
-//     console.log(`❌ Rejected promise ${position} in ${delay}ms`);
-//   });
+  const firstDelay = Number(firstDelayInput.value);
+  const step = Number(stepInput.value);
+  const amount = Number(amountInput.value);
 
-// submit.addEventListener('submit', onSubmit);
+  for (let i = 1; i <= amount; i += 1) {
+    const delayStep = firstDelay + step * (i - 1);
+    createPromise(i, delayStep)
+      .then(({ position, delay }) => {
+        console.log(`✅ Fulfilled promise ${position} in ${delay}ms`);
+      })
+      .catch(({ position, delay }) => {
+        console.log(`❌ Rejected promise ${position} in ${delay}ms`);
+      });
+  }
+}
 
-// function onSubmit(evt) {
-//   evt.preventDefault();
+function createPromise(position, delay) {
+  const shouldResolve = Math.random() > 0.3;
 
-//   let totalDelay = 0;
-
-//   console.log(firstDelay.value);
-// }
+  return new Promise((fulfill, reject) => {
+    setTimeout(() => {
+      if (shouldResolve) {
+        fulfill({ position, delay });
+      } else {
+        reject({ position, delay });
+      }
+    }, delay);
+  });
+}
