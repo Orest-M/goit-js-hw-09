@@ -35,21 +35,16 @@ const options = {
         const residual = selectedTime - currentTimeStart;
         const cmr = convertMs(residual);
 
-        daysFin = cmr.days;
-        hoursFin = cmr.hours;
-        minutesFin = cmr.minutes;
-        secondsFin = cmr.seconds;
-
-        daysSpan.textContent = addLeadingZero(daysFin);
-        hoursSpan.textContent = addLeadingZero(hoursFin);
-        minutesSpan.textContent = addLeadingZero(minutesFin);
-        secondsSpan.textContent = addLeadingZero(secondsFin);
+        daysSpan.textContent = addLeadingZero(cmr.days);
+        hoursSpan.textContent = addLeadingZero(cmr.hours);
+        minutesSpan.textContent = addLeadingZero(cmr.minutes);
+        secondsSpan.textContent = addLeadingZero(cmr.seconds);
 
         if (
-          daysFin === '00' &&
-          hoursFin === '00' &&
-          minutesFin === '00' &&
-          secondsFin === '00'
+          daysSpan.textContent === '00' &&
+          hoursSpan.textContent === '00' &&
+          minutesSpan.textContent === '00' &&
+          secondsSpan.textContent === '00'
         ) {
           clearInterval(interval);
           input.disabled = false;
