@@ -46,10 +46,10 @@ const options = {
         secondsSpan.textContent = addLeadingZero(secondsFin);
 
         if (
-          daysFin === 00 &&
-          hoursFin === 00 &&
-          minutesFin === 00 &&
-          secondsFin === 00
+          daysFin === '00' &&
+          hoursFin === '00' &&
+          minutesFin === '00' &&
+          secondsFin === '00'
         ) {
           clearInterval(interval);
           input.disabled = false;
