@@ -8,7 +8,10 @@ const hoursSpan = document.querySelector('.value[data-hours]');
 const minutesSpan = document.querySelector('.value[data-minutes]');
 const secondsSpan = document.querySelector('.value[data-seconds]');
 
+let selectedTime = null;
+
 start.disabled = true;
+start.addEventListener('click', onStart);
 
 const options = {
   enableTime: true,
@@ -18,46 +21,44 @@ const options = {
   onClose(selectedDates) {
     console.log(selectedDates[0]);
 
-    const selectedTime = new Date(selectedDates[0]);
+    selectedTime = new Date(selectedDates[0]);
     const currentTimeOnClose = new Date();
 
     if (selectedTime > currentTimeOnClose) {
       start.disabled = false;
-
-      start.addEventListener('click', onStart);
     } else {
       window.alert('Please choose a date in the future');
-    }
-
-    function onStart() {
-      const interval = setInterval(() => {
-        const currentTimeStart = new Date();
-        const residual = selectedTime - currentTimeStart;
-        const cmr = convertMs(residual);
-
-        daysSpan.textContent = addLeadingZero(cmr.days);
-        hoursSpan.textContent = addLeadingZero(cmr.hours);
-        minutesSpan.textContent = addLeadingZero(cmr.minutes);
-        secondsSpan.textContent = addLeadingZero(cmr.seconds);
-
-        if (
-          daysSpan.textContent === '00' &&
-          hoursSpan.textContent === '00' &&
-          minutesSpan.textContent === '00' &&
-          secondsSpan.textContent === '00'
-        ) {
-          clearInterval(interval);
-          input.disabled = false;
-        }
-      }, 1000);
-
-      start.disabled = true;
-      input.disabled = true;
     }
   },
 };
 
 flatpickr(input, options);
+
+function onStart() {
+  const interval = setInterval(() => {
+    const currentTimeStart = new Date();
+    const residual = selectedTime - currentTimeStart;
+    const cmr = convertMs(residual);
+
+    // daysSpan.textContent = addLeadingZero(cmr.days);
+    // hoursSpan.textContent = addLeadingZero(cmr.hours);
+    // minutesSpan.textContent = addLeadingZero(cmr.minutes);
+    // secondsSpan.textContent = addLeadingZero(cmr.seconds);
+
+    toSpan(daysSpan, cmr.days);
+    toSpan(hoursSpan, cmr.hours);
+    toSpan(minutesSpan, cmr.minutes);
+    toSpan(secondsSpan, cmr.seconds);
+
+    if (residual < 1000) {
+      clearInterval(interval);
+      input.disabled = false;
+    }
+  }, 1000);
+
+  start.disabled = true;
+  input.disabled = true;
+}
 
 function convertMs(ms) {
   // Number of milliseconds per unit of time
@@ -80,4 +81,8 @@ function convertMs(ms) {
 
 function addLeadingZero(value) {
   return value.toString().padStart(2, '0');
+}
+
+function toSpan(span, value) {
+  span.textContent = addLeadingZero(value);
 }
