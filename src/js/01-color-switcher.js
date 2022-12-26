@@ -11,19 +11,24 @@ function onStart() {
     body.style.backgroundColor = getRandomHexColor();
   }, 1000);
 
-  start.disabled = true;
-  stop.disabled = false;
+  onDisabled(true, false);
 
   stop.addEventListener('click', onStop);
 
   function onStop() {
     clearInterval(changeColorInterval);
 
-    stop.disabled = true;
-    start.disabled = false;
+    onDisabled(false, true);
+
+    stop.removeEventListener('click', onStop);
   }
 }
 
 function getRandomHexColor() {
   return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+}
+
+function onDisabled(x, y) {
+  start.disabled = x;
+  stop.disabled = y;
 }
